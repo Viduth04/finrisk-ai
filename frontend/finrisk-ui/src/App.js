@@ -129,8 +129,6 @@ export default function App() {
         <div className="bg-orb bg-orb-a" />
         <div className="bg-orb bg-orb-b" />
         <div className="bg-orb bg-orb-c" />
-        <div className="bg-shape bg-shape-a" />
-        <div className="bg-shape bg-shape-b" />
         <div className="bg-grid" />
       </div>
 

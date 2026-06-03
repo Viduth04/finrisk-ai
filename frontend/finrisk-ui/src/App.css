@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -8,8 +8,8 @@
 
 :root {
   color-scheme: light;
-  --font-h: "Syne", sans-serif;
-  --font-b: "Inter", sans-serif;
+  --font-h: "Manrope", sans-serif;
+  --font-b: "Manrope", sans-serif;
   --page: #f3efe6;
   --page-2: #ebe4d7;
   --nav-bg: rgba(247, 243, 234, 0.8);
@@ -162,34 +162,6 @@ img {
   animation-delay: -8s;
 }
 
-.bg-shape {
-  position: absolute;
-  opacity: 0.75;
-  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.12));
-}
-
-.bg-shape-a {
-  width: 110px;
-  height: 140px;
-  right: 12%;
-  top: 56%;
-  border-radius: 50% 18% 42% 30%;
-  background: linear-gradient(135deg, rgba(90, 216, 202, 0.72), rgba(77, 159, 224, 0.65));
-  transform: rotate(18deg);
-  animation: lift 9s ease-in-out infinite;
-}
-
-.bg-shape-b {
-  width: 80px;
-  height: 100px;
-  left: 8%;
-  bottom: 8%;
-  border-radius: 30% 58% 38% 60%;
-  background: linear-gradient(135deg, rgba(77, 159, 224, 0.42), rgba(90, 216, 202, 0.56));
-  animation: lift 11s ease-in-out infinite;
-  animation-delay: -2s;
-}
-
 .bg-grid {
   position: absolute;
   inset: 0;
@@ -204,11 +176,6 @@ img {
 @keyframes floaty {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
   50% { transform: translate3d(-24px, 18px, 0) scale(1.05); }
-}
-
-@keyframes lift {
-  0%, 100% { transform: translateY(0) rotate(18deg); }
-  50% { transform: translateY(-16px) rotate(12deg); }
 }
 
 @keyframes fadeUp {
@@ -730,7 +697,6 @@ img {
   color: #fff;
   background: linear-gradient(135deg, var(--sky), var(--teal));
   box-shadow: 0 12px 28px rgba(48, 157, 198, 0.24);
-  animation: lift 5s ease-in-out infinite;
   font-family: var(--font-h);
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -1042,7 +1008,6 @@ img {
   color: var(--ink);
   font-weight: 800;
   letter-spacing: 0.08em;
-  animation: lift 5.5s ease-in-out infinite;
 }
 
 .up-title {
