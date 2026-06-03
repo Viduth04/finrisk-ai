@@ -46,13 +46,12 @@ const METRICS = [
 ];
 
 const rc = (score) => (score < 45 ? "low" : score < 60 ? "mid" : "high");
-const rl = (score) =>
-  score < 45 ? "LOW RISK" : score < 60 ? "MEDIUM RISK" : "HIGH RISK";
+const rl = (score) => (score < 45 ? "LOW RISK" : score < 60 ? "MEDIUM RISK" : "HIGH RISK");
 
 function getInitialTheme() {
   const saved = window.localStorage.getItem(THEME_KEY);
   if (saved === "dark" || saved === "light") return saved;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return "light";
 }
 
 export default function App() {
@@ -142,7 +141,7 @@ export default function App() {
               <div className="nav-icon">F</div>
               <div>
                 <div className="nav-name">FinRisk AI</div>
-                <div className="nav-sub">Fast intelligence for Sri Lanka</div>
+                <div className="nav-sub">Fast, intelligence for Sri Lanka</div>
               </div>
             </div>
 
@@ -176,15 +175,15 @@ export default function App() {
         </nav>
 
         <header className="hero">
-          <div className="hero-badge">Built for Sri Lanka's Financial Landscape</div>
+          <div className="hero-badge">LL. Built for Sri Lanka's Financial Landscape</div>
           <h1 className="hero-title au d1">
             Smarter financial
             <br />
             <span className="grad">risk decisions</span>
           </h1>
           <p className="hero-desc au d2">
-            Instant risk scores, loan decisions, and Gemini-powered advice,
-            calibrated for Sri Lanka's economic reality.
+            Instant risk scores, loan decisions, and Gemini-powered AI advice —
+            all calibrated for Sri Lanka's economic reality.
           </p>
 
           <div className="hero-stats">
@@ -222,7 +221,7 @@ export default function App() {
                 <div className="card-kicker">Financial Profile</div>
                 <h2 className="card-title">Build your risk case</h2>
                 <p className="card-desc">
-                  Enter the key indicators and let the model score and Gemini advise.
+                  Enter the key indicators and fill the model scores and Gemini advice.
                 </p>
 
                 <label className="flabel" htmlFor="question" style={{ marginBottom: 7 }}>
@@ -293,12 +292,7 @@ export default function App() {
                   <span className="btn-inner">
                     {loading ? (
                       <>
-                        <svg
-                          className="spin-icon"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          aria-hidden="true"
-                        >
+                        <svg className="spin-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                           <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" opacity="0.25" />
                           <path fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                         </svg>
@@ -347,7 +341,7 @@ export default function App() {
                       </div>
                       <div className="score-right">
                         <div className={`dec-chip ${result.loan_approved === 1 ? "ok" : "no"}`}>
-                          {result.loan_approved === 1 ? "Approved" : "Review"} {result.loan_decision}
+                          {result.loan_approved === 1 ? "Loan Likely Approved" : "Loan Review Needed"}
                         </div>
                         <div className="pw-by">XGBoost · LightGBM</div>
                       </div>
@@ -364,7 +358,7 @@ export default function App() {
                         <div className="ai-avatar">AI</div>
                         <div>
                           <div className="ai-name">Gemini AI Advice</div>
-                          <div className="ai-sub">Personalized from your financial profile</div>
+                          <div className="ai-sub">Personalised from your financial profile</div>
                         </div>
                       </div>
                       <p className="ai-text">{result.gemini_response}</p>

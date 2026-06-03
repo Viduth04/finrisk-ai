@@ -77,8 +77,9 @@ html {
 body {
   font-family: var(--font-b);
   background:
-    radial-gradient(circle at 20% 0%, rgba(84, 199, 189, 0.12), transparent 28%),
-    radial-gradient(circle at 84% 15%, rgba(82, 161, 255, 0.12), transparent 30%),
+    radial-gradient(circle at 91% 6%, rgba(93, 213, 221, 0.24), transparent 18%),
+    radial-gradient(circle at 14% 82%, rgba(91, 210, 197, 0.13), transparent 16%),
+    radial-gradient(circle at 76% 72%, rgba(77, 159, 224, 0.06), transparent 12%),
     linear-gradient(180deg, var(--page) 0%, var(--page-2) 100%);
   color: var(--ink);
   min-height: 100vh;
@@ -117,8 +118,10 @@ img {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 80% 14%, rgba(82, 173, 255, 0.14), transparent 24%),
-    radial-gradient(circle at 15% 84%, rgba(40, 202, 175, 0.12), transparent 22%),
+    radial-gradient(circle at 88% 10%, rgba(84, 212, 221, 0.2), transparent 16%),
+    radial-gradient(circle at 88% 10%, rgba(84, 212, 221, 0.12), transparent 24%),
+    radial-gradient(circle at 88% 10%, rgba(84, 212, 221, 0.07), transparent 32%),
+    radial-gradient(circle at 16% 82%, rgba(76, 191, 202, 0.08), transparent 16%),
     linear-gradient(180deg, var(--page) 0%, var(--page-2) 100%);
 }
 
@@ -132,9 +135,13 @@ img {
 .bg-orb-a {
   width: 520px;
   height: 520px;
-  right: -130px;
-  top: -120px;
-  background: radial-gradient(circle, rgba(58, 204, 185, 0.2), transparent 68%);
+  right: -150px;
+  top: -140px;
+  background:
+    radial-gradient(circle, rgba(89, 211, 217, 0.2), transparent 56%),
+    radial-gradient(circle, transparent 55%, rgba(91, 210, 218, 0.22) 56%, rgba(91, 210, 218, 0.22) 57%, transparent 58%),
+    radial-gradient(circle, transparent 68%, rgba(91, 210, 218, 0.2) 69%, rgba(91, 210, 218, 0.2) 70%, transparent 71%),
+    radial-gradient(circle, transparent 80%, rgba(91, 210, 218, 0.16) 81%, rgba(91, 210, 218, 0.16) 82%, transparent 83%);
 }
 
 .bg-orb-b {
@@ -142,7 +149,7 @@ img {
   height: 420px;
   left: -120px;
   bottom: -160px;
-  background: radial-gradient(circle, rgba(77, 159, 224, 0.16), transparent 68%);
+  background: radial-gradient(circle, rgba(77, 159, 224, 0.12), transparent 68%);
   animation-delay: -4s;
 }
 
@@ -151,7 +158,7 @@ img {
   height: 280px;
   right: 18%;
   top: 34%;
-  background: radial-gradient(circle, rgba(95, 224, 200, 0.1), transparent 70%);
+  background: radial-gradient(circle, rgba(95, 224, 200, 0.08), transparent 70%);
   animation-delay: -8s;
 }
 
@@ -164,10 +171,10 @@ img {
 .bg-shape-a {
   width: 110px;
   height: 140px;
-  right: 10%;
-  top: 54%;
+  right: 12%;
+  top: 56%;
   border-radius: 50% 18% 42% 30%;
-  background: linear-gradient(135deg, rgba(90, 216, 202, 0.9), rgba(77, 159, 224, 0.85));
+  background: linear-gradient(135deg, rgba(90, 216, 202, 0.72), rgba(77, 159, 224, 0.65));
   transform: rotate(18deg);
   animation: lift 9s ease-in-out infinite;
 }
@@ -178,7 +185,7 @@ img {
   left: 8%;
   bottom: 8%;
   border-radius: 30% 58% 38% 60%;
-  background: linear-gradient(135deg, rgba(77, 159, 224, 0.55), rgba(90, 216, 202, 0.75));
+  background: linear-gradient(135deg, rgba(77, 159, 224, 0.42), rgba(90, 216, 202, 0.56));
   animation: lift 11s ease-in-out infinite;
   animation-delay: -2s;
 }
@@ -186,7 +193,7 @@ img {
 .bg-grid {
   position: absolute;
   inset: 0;
-  opacity: 0.06;
+  opacity: 0.08;
   background-image:
     linear-gradient(to right, rgba(96, 127, 149, 0.35) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(96, 127, 149, 0.35) 1px, transparent 1px);
@@ -266,7 +273,7 @@ img {
 .wrap,
 .nav-i,
 .hero {
-  width: min(1260px, calc(100% - 48px));
+  width: min(1180px, calc(100% - 48px));
   margin: 0 auto;
 }
 
@@ -391,7 +398,7 @@ img {
 }
 
 .hero {
-  padding: 48px 0 34px;
+  padding: 42px 0 30px;
 }
 
 .hero-badge {
@@ -428,17 +435,18 @@ img {
 }
 
 .hero-desc {
-  max-width: 580px;
+  max-width: 550px;
   font-size: 16px;
   line-height: 1.7;
   color: var(--muted);
-  margin-bottom: 30px;
+  margin-bottom: 26px;
 }
 
 .hero-stats {
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
+  max-width: 610px;
 }
 
 .hstat {
@@ -479,7 +487,7 @@ img {
 .tabs-row {
   display: flex;
   justify-content: center;
-  margin: 8px 0 28px;
+  margin: 2px 0 26px;
 }
 
 .tabs-inner {
@@ -518,15 +526,15 @@ img {
 
 .two-col {
   display: grid;
-  grid-template-columns: 1fr 1.08fr;
-  gap: 20px;
+  grid-template-columns: 0.98fr 1.02fr;
+  gap: 18px;
   align-items: start;
 }
 
 .card {
   border: 1px solid var(--border);
-  border-radius: 28px;
-  padding: 28px;
+  border-radius: 26px;
+  padding: 24px;
   background: var(--card);
   box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
@@ -536,6 +544,13 @@ img {
 .card:hover {
   box-shadow: var(--shadow-2);
   border-color: var(--border-strong);
+}
+
+.asr,
+.asl {
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--teal) 10%, transparent), transparent 34%),
+    var(--card);
 }
 
 .card-kicker {
@@ -762,10 +777,11 @@ img {
   justify-content: space-between;
   gap: 18px;
   flex-wrap: wrap;
-  padding: 20px 22px;
+  padding: 18px 20px;
   border-radius: 20px;
   border: 1px solid;
   animation: scoreIn 0.55s cubic-bezier(0.22, 0.68, 0, 1.2) both;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
 .score-card.low {
@@ -794,7 +810,7 @@ img {
 
 .score-num {
   font-family: var(--font-h);
-  font-size: 72px;
+  font-size: 68px;
   line-height: 1;
   letter-spacing: -0.08em;
   font-weight: 800;
@@ -860,6 +876,7 @@ img {
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
   animation: fadeIn 0.45s ease both;
+  background: color-mix(in srgb, var(--card-2) 60%, transparent);
 }
 
 .chart-wrap img {
@@ -868,7 +885,7 @@ img {
 }
 
 .ai-box {
-  padding: 18px 20px;
+  padding: 16px 18px;
   border-radius: 18px;
   border: 1px solid color-mix(in srgb, var(--sky) 25%, var(--border) 75%);
   background:
@@ -918,7 +935,7 @@ img {
 .lk-note {
   display: flex;
   gap: 10px;
-  padding: 13px 15px;
+  padding: 12px 14px;
   border-radius: 14px;
   border: 1px solid color-mix(in srgb, var(--sky) 22%, var(--border) 78%);
   background: color-mix(in srgb, var(--sky) 12%, var(--card) 88%);
@@ -939,7 +956,7 @@ img {
 }
 
 .chat-area {
-  padding: 18px 20px;
+  padding: 16px 18px;
   border-radius: 18px;
   border: 1px solid var(--border);
   background: var(--card-2);
@@ -990,7 +1007,7 @@ img {
 }
 
 .upload-card {
-  width: min(680px, 100%);
+  width: min(660px, 100%);
 }
 
 .upload-zone {
@@ -998,7 +1015,7 @@ img {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 48px 22px;
+  padding: 44px 22px;
   margin-bottom: 16px;
   border-radius: 24px;
   border: 1.5px dashed var(--border-strong);
@@ -1138,7 +1155,7 @@ img {
 
 .footer {
   margin-top: auto;
-  padding: 18px 24px 24px;
+  padding: 16px 24px 20px;
   text-align: center;
   color: var(--muted);
   font-size: 12px;
@@ -1156,7 +1173,7 @@ img {
   }
 
   .score-num {
-    font-size: 60px;
+    font-size: 58px;
   }
 }
 
@@ -1213,4 +1230,3 @@ img {
     padding: 18px;
   }
 }
-
