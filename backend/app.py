@@ -13,10 +13,20 @@ import base64
 import os
 from google import genai
 from dotenv import load_dotenv
+from urllib.request import Request, urlopen
+from urllib.error import URLError, HTTPError
+from xml.etree import ElementTree as ET
+from html import unescape
+from datetime import datetime, timezone
 
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-gemini = genai.Client(api_key=GEMINI_API_KEY)
+gemini = None
+if GEMINI_API_KEY:
+    try:
+        gemini = genai.Client(api_key=GEMINI_API_KEY)
+    except Exception:
+        gemini = None
 
 app = FastAPI(title="FinRisk AI API")
 
@@ -34,6 +44,35 @@ lgb_model  = joblib.load(os.path.join(BASE, 'lgb_regressor.pkl'))
 scaler     = joblib.load(os.path.join(BASE, 'scaler.pkl'))
 with open(os.path.join(BASE, 'feature_names.json')) as f:
     feature_names = json.load(f)
+
+BUSINESS_FEEDS = [
+    "https://feeds.reuters.com/reuters/businessNews",
+    "https://feeds.reuters.com/reuters/technologyNews",
+]
+
+NEWS_FALLBACK = [
+    {
+        "title": "Markets watch earnings and inflation signals as investors stay cautious",
+        "link": "https://www.reuters.com/business/",
+        "published": "Today",
+        "summary": "A snapshot of the business climate while live headlines are unavailable.",
+        "source": "Reuters Business",
+    },
+    {
+        "title": "Currency swings and rate expectations remain key risk themes",
+        "link": "https://www.reuters.com/business/",
+        "published": "Today",
+        "summary": "Useful context for the loan and risk decisions shown in FinRisk AI.",
+        "source": "Reuters Business",
+    },
+    {
+        "title": "Business leaders weigh growth, regulation and AI investment",
+        "link": "https://www.reuters.com/business/",
+        "published": "Today",
+        "summary": "Broad market sentiment and policy shifts still shape credit and lending risk.",
+        "source": "Reuters Business",
+    },
+]
 
 class UserInput(BaseModel):
     age: int
@@ -57,6 +96,94 @@ class ChatMessage(BaseModel):
     risk_score: float = None
     loan_approved: int = None
     financial_context: dict = None
+
+def _normalize_text(value):
+    return unescape(" ".join((value or "").split())).strip()
+
+def _parse_date(value):
+    value = _normalize_text(value)
+    return value or "Today"
+
+def _fetch_url(url):
+    req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    with urlopen(req, timeout=8) as response:
+        return response.read()
+
+def _parse_feed(xml_bytes):
+    root = ET.fromstring(xml_bytes)
+    items = []
+
+    if root.tag.endswith("rss"):
+        for item in root.findall("./channel/item"):
+            title = _normalize_text(item.findtext("title"))
+            link = _normalize_text(item.findtext("link"))
+            summary = _normalize_text(item.findtext("description"))
+            published = _parse_date(item.findtext("pubDate"))
+            if title:
+                items.append(
+                    {
+                        "title": title,
+                        "link": link or "https://www.reuters.com/business/",
+                        "published": published,
+                        "summary": summary,
+                        "source": "Reuters Business",
+                    }
+                )
+    else:
+        ns = {"atom": "http://www.w3.org/2005/Atom"}
+        for entry in root.findall(".//atom:entry", ns):
+            title = _normalize_text(entry.findtext("atom:title", default="", namespaces=ns))
+            summary = _normalize_text(entry.findtext("atom:summary", default="", namespaces=ns))
+            published = _parse_date(entry.findtext("atom:updated", default="", namespaces=ns))
+            link_el = entry.find("atom:link[@rel='alternate']", ns)
+            link = link_el.attrib.get("href") if link_el is not None else ""
+            if title:
+                items.append(
+                    {
+                        "title": title,
+                        "link": link or "https://www.reuters.com/business/",
+                        "published": published,
+                        "summary": summary,
+                        "source": "Reuters Business",
+                    }
+                )
+
+    return items
+
+def get_latest_business_news(limit=3):
+    for feed_url in BUSINESS_FEEDS:
+        try:
+            xml_bytes = _fetch_url(feed_url)
+            items = _parse_feed(xml_bytes)
+            if items:
+                return items[:limit]
+        except (URLError, HTTPError, ET.ParseError, TimeoutError, ValueError):
+            continue
+        except Exception:
+            continue
+    return NEWS_FALLBACK[:limit]
+
+def _gemini_fallback():
+    return (
+        "AI advice is temporarily unavailable. "
+        "Please rotate your Gemini API key and try again. "
+        "For now, use the risk score, loan decision, and business news panel as your guide."
+    )
+
+def _generate_gemini_text(prompt: str):
+    if gemini is None:
+        return None
+    try:
+        response = gemini.models.generate_content(
+            model="gemini-2.5-flash-lite",
+            contents=prompt
+        )
+        return getattr(response, "text", None)
+    except Exception as e:
+        message = str(e)
+        if "PERMISSION_DENIED" in message or "reported as leaked" in message or "403" in message:
+            return None
+        return None
 
 def build_feature_vector(data: UserInput):
     row = {col: 0 for col in feature_names}
@@ -172,11 +299,8 @@ Give a clear, friendly, personalized response in 4-6 sentences.
 Include specific actionable advice relevant to Sri Lanka.
 End with one concrete next step they should take.
 """
-    response = gemini.models.generate_content(
-        model="gemini-2.5-flash-lite",
-        contents=prompt
-    )
-    return response.text
+    response_text = _generate_gemini_text(prompt)
+    return response_text or _gemini_fallback()
 
 @app.get("/")
 def root():
@@ -217,13 +341,10 @@ User asks: "{msg.message}"
 {"Their risk score is: " + str(msg.risk_score) if msg.risk_score else ""}
 Give helpful, concise financial advice in 3-4 sentences relevant to Sri Lanka.
 """
-        response = gemini.models.generate_content(
-            model="gemini-2.5-flash-lite",
-            contents=prompt
-        )
-        return {"response": response.text}
+        response_text = _generate_gemini_text(prompt)
+        return {"response": response_text or _gemini_fallback()}
     except Exception as e:
-        return {"response": f"Error: {str(e)}"}
+        return {"response": _gemini_fallback()}
 
 @app.post("/upload-csv")
 async def upload_csv(file: UploadFile = File(...)):
@@ -233,4 +354,12 @@ async def upload_csv(file: UploadFile = File(...)):
         "rows":    len(df),
         "columns": df.columns.tolist(),
         "preview": df.head(3).to_dict(orient='records')
+    }
+
+@app.get("/news")
+def latest_business_news():
+    return {
+        "source": "Reuters Business",
+        "fetched_at": datetime.now(timezone.utc).isoformat(),
+        "items": get_latest_business_news(),
     }

@@ -368,6 +368,17 @@ img {
   padding: 42px 0 30px;
 }
 
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.hero-copy {
+  max-width: 620px;
+}
+
 .hero-badge {
   display: inline-flex;
   align-items: center;
@@ -414,6 +425,161 @@ img {
   gap: 14px;
   flex-wrap: wrap;
   max-width: 610px;
+}
+
+.news-panel {
+  position: relative;
+  padding: 22px;
+  border-radius: 28px;
+  border: 1px solid color-mix(in srgb, var(--teal) 18%, var(--border) 82%);
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--teal) 15%, transparent), transparent 28%),
+    radial-gradient(circle at bottom left, color-mix(in srgb, var(--sky) 10%, transparent), transparent 24%),
+    var(--card);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  overflow: hidden;
+}
+
+.news-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), transparent 18%);
+  pointer-events: none;
+}
+
+.news-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.news-kicker {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: color-mix(in srgb, var(--teal) 82%, var(--ink) 18%);
+  margin-bottom: 6px;
+}
+
+.news-title {
+  font-family: var(--font-h);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.news-refresh {
+  border: 1px solid var(--border);
+  background: var(--card-2);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.news-refresh:hover {
+  transform: translateY(-1px);
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--teal) 34%, var(--border) 66%);
+  background: color-mix(in srgb, var(--teal) 10%, var(--card-2) 90%);
+}
+
+.news-sub {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.news-loading {
+  display: grid;
+  gap: 10px;
+}
+
+.news-skel {
+  height: 92px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background:
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--card-2) 68%, transparent) 0%,
+      color-mix(in srgb, var(--card-strong) 90%, transparent) 50%,
+      color-mix(in srgb, var(--card-2) 68%, transparent) 100%);
+  background-size: 240% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+
+.news-error {
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--high-border);
+  background: var(--high-bg);
+  color: var(--high);
+  font-size: 13px;
+}
+
+.news-item {
+  display: block;
+  padding: 14px 15px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--card-2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.news-item + .news-item {
+  margin-top: 10px;
+}
+
+.news-item:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--teal) 30%, var(--border) 70%);
+  background: color-mix(in srgb, var(--teal) 8%, var(--card-2) 92%);
+}
+
+.news-item-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.news-source {
+  color: color-mix(in srgb, var(--teal) 78%, var(--ink) 22%);
+  font-weight: 800;
+}
+
+.news-time {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.news-item-title {
+  font-family: var(--font-h);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.45;
+  margin-bottom: 5px;
+}
+
+.news-item-summary {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
 }
 
 .hstat {
@@ -1133,12 +1299,20 @@ img {
     width: min(100% - 28px, 1260px);
   }
 
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
   .two-col {
     grid-template-columns: 1fr;
   }
 
   .score-num {
     font-size: 58px;
+  }
+
+  .news-panel {
+    max-width: 720px;
   }
 }
 
@@ -1157,6 +1331,10 @@ img {
     padding-top: 34px;
   }
 
+  .hero-grid {
+    gap: 18px;
+  }
+
   .hero-title {
     font-size: 34px;
   }
@@ -1167,6 +1345,10 @@ img {
 
   .hstat {
     min-width: calc(50% - 7px);
+  }
+
+  .news-panel {
+    padding: 18px;
   }
 
   .fgrid {

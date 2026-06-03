@@ -65,6 +65,9 @@ export default function App() {
   const [fu, setFu] = useState("");
   const [fuR, setFuR] = useState(null);
   const [fuLoad, setFuLoad] = useState(false);
+  const [news, setNews] = useState([]);
+  const [newsLoad, setNewsLoad] = useState(true);
+  const [newsErr, setNewsErr] = useState(null);
   const [theme, setTheme] = useState(getInitialTheme);
   const fileRef = useRef(null);
 
@@ -72,6 +75,24 @@ export default function App() {
     document.documentElement.dataset.theme = theme;
     window.localStorage.setItem(THEME_KEY, theme);
   }, [theme]);
+
+  useEffect(() => {
+    const loadNews = async () => {
+      setNewsLoad(true);
+      setNewsErr(null);
+      try {
+        const r = await axios.get(`${API}/news`);
+        setNews(r.data?.items || []);
+      } catch {
+        setNewsErr("Live news is unavailable right now.");
+        setNews([]);
+      } finally {
+        setNewsLoad(false);
+      }
+    };
+
+    loadNews();
+  }, []);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -139,7 +160,7 @@ export default function App() {
               <div className="nav-icon">F</div>
               <div>
                 <div className="nav-name">FinRisk AI</div>
-                <div className="nav-sub">Fast, intelligence for Sri Lanka</div>
+                <div className="nav-sub">Fast intelligence for Sri Lanka</div>
               </div>
             </div>
 
@@ -173,24 +194,71 @@ export default function App() {
         </nav>
 
         <header className="hero">
-          <div className="hero-badge">LL. Built for Sri Lanka's Financial Landscape</div>
-          <h1 className="hero-title au d1">
-            Smarter financial
-            <br />
-            <span className="grad">risk decisions</span>
-          </h1>
-          <p className="hero-desc au d2">
-            Instant risk scores, loan decisions, and Gemini-powered AI advice —
-            all calibrated for Sri Lanka's economic reality.
-          </p>
+          <div className="hero-grid">
+            <div className="hero-copy">
+              <div className="hero-badge">LL. Built for Sri Lanka's Financial Landscape</div>
+              <h1 className="hero-title au d1">
+                Smarter financial
+                <br />
+                <span className="grad">risk decisions</span>
+              </h1>
+              <p className="hero-desc au d2">
+                Instant risk scores, loan decisions, and Gemini-powered AI advice -
+                all calibrated for Sri Lanka's economic reality.
+              </p>
 
-          <div className="hero-stats">
-            {METRICS.map((s, i) => (
-              <div className={`hstat au d${i + 3}`} key={s.l}>
-                <div className="hstat-v">{s.v}</div>
-                <div className="hstat-l">{s.l}</div>
+              <div className="hero-stats">
+                {METRICS.map((s, i) => (
+                  <div className={`hstat au d${i + 3}`} key={s.l}>
+                    <div className="hstat-v">{s.v}</div>
+                    <div className="hstat-l">{s.l}</div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            <aside className="news-panel au d2">
+              <div className="news-head">
+                <div>
+                  <div className="news-kicker">Latest business news</div>
+                  <h2 className="news-title">Market pulse</h2>
+                </div>
+                <button className="news-refresh" type="button" onClick={() => window.location.reload()}>
+                  Refresh
+                </button>
+              </div>
+              <p className="news-sub">
+                Live headlines pulled from a Reuters business feed so the open space stays useful.
+              </p>
+
+              {newsLoad && (
+                <div className="news-loading">
+                  <div className="news-skel" />
+                  <div className="news-skel" />
+                  <div className="news-skel" />
+                </div>
+              )}
+
+              {!newsLoad && newsErr && <div className="news-error">{newsErr}</div>}
+
+              {!newsLoad &&
+                news.map((item, index) => (
+                  <a
+                    key={`${item.title}-${index}`}
+                    className="news-item"
+                    href={item.link}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <div className="news-item-top">
+                      <span className="news-source">{item.source || "Reuters Business"}</span>
+                      <span className="news-time">{item.published}</span>
+                    </div>
+                    <div className="news-item-title">{item.title}</div>
+                    {item.summary && <div className="news-item-summary">{item.summary}</div>}
+                  </a>
+                ))}
+            </aside>
           </div>
         </header>
 
