@@ -163,12 +163,14 @@ def get_latest_business_news(limit=3):
             continue
     return NEWS_FALLBACK[:limit]
 
-def _gemini_fallback():
+def _gemini_fallback_main():
     return (
-        "AI advice is temporarily unavailable. "
-        "Please rotate your Gemini API key and try again. "
+        "AI advice is temporarily unavailable. Please rotate your Gemini API key and try again. "
         "For now, use the risk score, loan decision, and business news panel as your guide."
     )
+
+def _gemini_fallback_chat():
+    return "AI advice is temporarily unavailable right now. Try again after rotating the Gemini API key."
 
 def _generate_gemini_text(prompt: str):
     if gemini is None:
@@ -300,7 +302,7 @@ Include specific actionable advice relevant to Sri Lanka.
 End with one concrete next step they should take.
 """
     response_text = _generate_gemini_text(prompt)
-    return response_text or _gemini_fallback()
+    return response_text or _gemini_fallback_main()
 
 @app.get("/")
 def root():
@@ -342,9 +344,9 @@ User asks: "{msg.message}"
 Give helpful, concise financial advice in 3-4 sentences relevant to Sri Lanka.
 """
         response_text = _generate_gemini_text(prompt)
-        return {"response": response_text or _gemini_fallback()}
+        return {"response": response_text or _gemini_fallback_chat()}
     except Exception as e:
-        return {"response": _gemini_fallback()}
+        return {"response": _gemini_fallback_chat()}
 
 @app.post("/upload-csv")
 async def upload_csv(file: UploadFile = File(...)):
